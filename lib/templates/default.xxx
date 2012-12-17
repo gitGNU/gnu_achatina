@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!-- Copyright (c) 2012 Tomasz Konojacki
+   -
+   - See the file "license.terms" for information on usage and redistribution
+   - of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+   -->
+<html>
+    <head>
+        <title>Achatina - <:= $status :></title>
+    </head>
+    <body>
+        <p>
+            <:= $status :>:
+        <p>
+            <pre><:= $err_body :></pre>
+    </body>
+</html>
