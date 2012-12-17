@@ -1,0 +1,81 @@
+#!/usr/bin/env tclsh
+
+package require base64
+
+set bin_app_tcl {
+    IyEvdXNyL2Jpbi9lbnYgdGNsc2gKcGFja2FnZSByZXF1aXJlIEFjaGF0aW5hOwoKc2V0IHNjcmlw
+    dF9kaXIgW2ZpbGUgZGlybmFtZSBbZmlsZSBub3JtYWxpemUgW2luZm8gc2NyaXB0XV1dCgojIExv
+    YWQgcm91dGUgaGFuZGxlcnMKc291cmNlIFtmaWxlIGpvaW4gJHNjcmlwdF9kaXIgLi4gbGliIGhh
+    bmRsZXJzLnRjbF0KCm9vOjpjbGFzcyBjcmVhdGUgOjpTdGFydHVwIHsKICAgIGNvbnN0cnVjdG9y
+    IHtjb25maWd9IHsKICAgIH0KCiAgICBtZXRob2Qgc2V0X3JvdXRlcyB7cm91dGVyIGNvbmZpZ30g
+    ewogICAgICAgICRyb3V0ZXIgYWRkX3JvdXRlIC8gOjpUZXN0OjppbmRleAogICAgfQp9CgpzZXQg
+    YXBwbGljYXRpb24gW0FjaGF0aW5hOjpBcHBsaWNhdGlvbiBuZXcgezo6U3RhcnR1cH0gey4uL2Nv
+    bmZpZy55bWx9XQ==
+}
+
+set lib_handlers_tcl {
+    cGFja2FnZSBwcm92aWRlIFRlc3QgMS4wOwoKcGFja2FnZSByZXF1aXJlIEFjaGF0aW5hCgpuYW1l
+    c3BhY2UgZXZhbCA6OlRlc3Qge30KCm9vOjpjbGFzcyBjcmVhdGUgOjpUZXN0OjppbmRleCB7CiAg
+    ICBjb25zdHJ1Y3RvciB7Y29uZmlnfSB7CiAgICB9CgogICAgbWV0aG9kIGRvX2dldCB7cmVxdWVz
+    dCBzZXNzaW9uIGNvbmZpZ30gewogICAgICAgIHNldCB0ZW1wbGF0ZSBbOjpBY2hhdGluYTo6VGVt
+    cGxhdGUgbmV3IGluZGV4ICRjb25maWddCiAgICAgICAgJHRlbXBsYXRlIHNldF9wYXJhbSB3aGF0
+    IFdvcmxkCiAgICAgICAgcmV0dXJuIFskdGVtcGxhdGUgZ2V0X291dHB1dF0KICAgIH0KfQ==
+}
+
+set views_index_xxx {
+    SGVsbG8gPDo9ICR3aGF0IDo+IQo=
+}
+
+set config_yml {
+    IyBBY2hhdGluYSBjb25maWd1cmF0aW9uIGZpbGUuCiMgTm90ZSB0aGF0IGV2ZXJ5IHBhdGggaXMg
+    cmVsYXRpdmUgdG8gZGlyZWN0b3J5IGNvbnRhaW5pbmcgbWFpbiBzY3JpcHQuCgphcHA6CiAgIyBC
+    dWlsdC1pbiBodHRwIHNlcnZlciBvcHRpb25zOgogIGh0dHBkOgogICAgIyBXaGVyZSBhcmUgc3Rh
+    dGljIGZpbGVzIGxvY2F0ZWQ6CiAgICBzdGF0aWNfZmlsZXNfcGF0aDogLi4vc3RhdGljCiAgICAj
+    IFBvcnQgb24gd2hpY2ggaHR0cGQgc2hvdWxkIGxpc3RlbjoKICAgIHBvcnQ6IDgwODAKICAgICMg
+    QWRkcmVzcyBvbiB3aGljaCBodHRwZCBzaG91bGQgbGlzdGVuICgwIG1lYW5zIGFsbCBhdmFpbGFi
+    bGUpOgogICAgYmluZDogMAogICAgIyBNYXggcmVxdWVzdCBzaXplIChpbiBieXRlcyk6CiAgICBt
+    YXhfcmVxdWVzdF9zaXplOiAxMDQ4NTc2MAogICMgRXJyb3ItcmVsYXRlZCBvcHRpb25zOgogIGVy
+    cm9yOgogICAgIyBFcnJvciB0ZW1wbGF0ZXM6CiAgICB0ZW1wbGF0ZXM6CiAgICAgICMgRm9yIGV4
+    YW1wbGU6CiAgICAgICMgNDA0OiAuLi92aWV3cy81MDAueHh4CiAgCiAgIyBPcHRpb25zIHJlbGF0
+    ZWQgdG8gdGVtcGxhdGVzOgogIHRlbXBsYXRlOgogICAgIyBEZWZhdWx0IGV4dGVuc2lvbiBvZiB0
+    ZW1wbGF0ZXM6CiAgICBleHRlbnNpb246IHh4eAogICAgIyBQYXRoIHRvIHRlbXBsYXRlcyBkaXJl
+    Y3Rvcnk6CiAgICBwYXRoOiAuLi92aWV3cwogIAogICMgT3B0aW9ucyByZWxhdGVkIHRvIHNlc3Np
+    b24gbWFuYWdlbWVudAogIHNlc3Npb246CiAgICAjIEhvdyBsb25nIHNob3VsZCBiZSBzZXNzaW9u
+    LWNvb2tpZSB2YWxpZDogCiAgICBzZWNvbmRzOiAzMTUzNjAwMAogICAgIyBOYW1lIG9mIHNlc3Np
+    b24gY29va2llOgogICAgY29va2llX25hbWU6IF9fTVVSSVNfU0VTU0lPTgogICAgIyBIYXNoaW5n
+    IGFsZ29yaXRobSBvZiBzZXNzaW9uOgogICAgIyBzZXNzaW9uX2FsZ29yaXRobSBtdXN0IGJlIG9u
+    ZSBvZiBmb2xsb3dpbmc6IHJpcGVtZDE2MCwgc2hhMjU2CiAgICBhbGdvcml0aG06IHJpcGVtZDE2
+    MAogICAgIyAhISEgSU1QT1JUQU5UICEhIQogICAgIwogICAgIyBZb3VyIHNlY3JldCBrZXkgbXVz
+    dCByZW1haW4gc2VjcmV0LiBBbnlvbmUgd2hvIGtub3dzIGl0IGNhbiBjcmVhdGUgc2Vzc2lvbnMK
+    ICAgICMgd2l0aCBmYWtlIGRhdGEgYW5kIHRha2UgY29udHJvbCBvdmVyIHlvdXIgYXBwbGljYXRp
+    b24uIFlvdXIga2V5IHNob3VsZG4ndCBiZQogICAgIyBlYXN5IHRvIGd1ZXNzLiBSZW1lbWJlciB0
+    aGF0IGxvbmdlciBpcyBiZXR0ZXIhCiAgICBzZWNyZXRfa2V5OiBjSGFOZ0VfbUUK
+}
+
+if {[llength $::argv] != 1} {
+    puts "Usage:\n"
+    puts "achatina.tcl project_name"
+    exit 1
+}
+
+puts "Creating directories..."
+
+file mkdir [lindex $::argv 0] [file join [lindex $::argv 0] bin] [file join [lindex $::argv 0] lib] [file join [lindex $::argv 0] views]
+
+puts "Creating files..."
+
+set fp [open [file join [lindex $::argv 0] bin app.tcl] w]
+puts -nonewline $fp [::base64::decode $bin_app_tcl]
+close $fp
+
+set fp [open [file join [lindex $::argv 0] lib handlers.tcl] w]
+puts -nonewline $fp [::base64::decode $lib_handlers_tcl]
+close $fp
+
+set fp [open [file join [lindex $::argv 0] views index.xxx] w]
+puts -nonewline $fp [::base64::decode $views_index_xxx]
+close $fp
+
+set fp [open [file join [lindex $::argv 0] config.yml] w]
+puts -nonewline $fp [::base64::decode $config_yml]
+close $fp
