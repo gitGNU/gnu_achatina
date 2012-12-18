@@ -25,20 +25,12 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
             dict set headers QUERY_STRING $::env(QUERY_STRING)
         }
 
-        if {[info exists ::env(SERVER_NAME)]} {
-            dict set headers SERVER_NAME $::env(SERVER_NAME)
-        }
-
-        if {[info exists ::env(SERVER_PORT)]} {
-            dict set headers SERVER_PORT $::env(SERVER_PORT)
-        }
-
         if {[info exists ::env(SCRIPT_NAME)]} {
             dict set headers SCRIPT_NAME $::env(SCRIPT_NAME)
         }
 
-        if {[info exists ::env(SERVER_SOFTWARE)]} {
-            dict set headers SERVER_SOFTWARE $::env(SERVER_SOFTWARE)
+        if {[info exists ::env(SCRIPT_FILENAME)]} {
+            dict set headers SCRIPT_FILENAME $::env(SCRIPT_FILENAME)
         }
 
         if {[info exists ::env(GATEWAY_INTERFACE)]} {
