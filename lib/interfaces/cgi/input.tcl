@@ -37,6 +37,27 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
             dict set headers SCRIPT_NAME $::env(SCRIPT_NAME)
         }
 
+        if {[info exists ::env(SERVER_SOFTWARE)]} {
+            dict set headers SERVER_SOFTWARE $::env(SERVER_SOFTWARE)
+        }
+
+        if {[info exists ::env(GATEWAY_INTERFACE)]} {
+            dict set headers GATEWAY_INTERFACE $::env(GATEWAY_INTERFACE)
+        }
+
+        if {[info exists ::env(PATH_INFO)]} {
+            dict set headers PATH_INFO $::env(PATH_INFO)
+        } else {
+            dict set headers PATH_INFO {/}
+        }
+
+        # Catch HTTP_* and SERVER_* variables
+        foreach {k v} [array get ::env] {
+            if {[regexp {^HTTP_} $k] || [regexp {^SERVER_} $k]} {
+                dict set headers $k $v
+            }
+        }
+
         dict set headers __PROTOCOL__ {http}
 
         if {[info exists ::env(HTTPS)]} {
@@ -46,18 +67,15 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
         }
 
         # IIS has broken PATH_INFO, it contains script name
-        if {[info exists ::env(PATH_INFO)]} {
-            if {[info exists ::env(SERVER_SOFTWARE)] && [info exists ::env(SCRIPT_NAME)]} {
-                if {[regexp {^Microsoft-IIS} $::env(SERVER_SOFTWARE)]} {
+        if {[dict exists $headers PATH_INFO]} {
+            if {[dict exists $headers SERVER_SOFTWARE] && [dict exists $headers SCRIPT_NAME]} {
+                if {[regexp {^Microsoft-IIS} [dict get $headers SERVER_SOFTWARE]]} {
                     set path {}
                     # Delete script name from path
-                    if {[regsub "^$::env(SCRIPT_NAME)" $::env(PATH_INFO) {} path] > 0} {
+                    if {[regsub "^[dict get $headers SCRIPT_NAME]" [dict get $headers PATH_INFO] {} path] > 0} {
                         dict set headers PATH_INFO $path
                     }
                 }
-            }
-            if {![dict exists $headers PATH_INFO]} {
-                dict set headers PATH_INFO $::env(PATH_INFO)
             }
         }
     }
