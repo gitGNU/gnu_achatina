@@ -17,10 +17,6 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
 
         ### set headers ###
 
-        if {[info exists ::env(REQUEST_METHOD)]} {
-             dict set headers REQUEST_METHOD [string tolower $::env(REQUEST_METHOD)]
-        }
-
         if {[info exists ::env(QUERY_STRING)]} {
             dict set headers QUERY_STRING $::env(QUERY_STRING)
         }
@@ -41,6 +37,12 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
             dict set headers PATH_INFO $::env(PATH_INFO)
         } else {
             dict set headers PATH_INFO {/}
+        }
+
+        if {[info exists ::env(REQUEST_METHOD)]} {
+             dict set headers REQUEST_METHOD [string tolower $::env(REQUEST_METHOD)]
+        } else {
+            dict set headers REQUEST_METHOD get
         }
 
         # Catch HTTP_* and SERVER_* variables
