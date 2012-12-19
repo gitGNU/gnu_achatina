@@ -38,7 +38,7 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
         }
 
         if {[info exists ::env(REMOTE_ADDR)]} {
-            dict set headers PATH_INFO $::env(REMOTE_ADDR)
+            dict set headers REMOTE_ADDR $::env(REMOTE_ADDR)
         }
 
         if {[info exists ::env(REQUEST_METHOD)]} {
