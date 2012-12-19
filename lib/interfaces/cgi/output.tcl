@@ -65,7 +65,7 @@ oo::class create ::Achatina::Interfaces::Cgi::Output {
 
         if {$content_type eq ""} {set content_type "text/html"}
 
-        ::ncgi::header {$content_type} Status {$status} {*}$tmp_headers
+        ::ncgi::header $content_type Status $status {*}$tmp_headers
         puts -nonewline $contents
     }
 }
