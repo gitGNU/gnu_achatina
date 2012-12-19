@@ -3,7 +3,9 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-package provide Achatina 1.0;
+package provide Achatina 1.0
+
+package require Tcl 8.6
 
 namespace eval ::Achatina {
     variable lib_dir [file dirname [file normalize [info script]]]
