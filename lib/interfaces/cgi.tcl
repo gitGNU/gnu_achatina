@@ -19,14 +19,12 @@ oo::class create ::Achatina::Interfaces::Cgi {
         source [file join $::Achatina::lib_dir interfaces cgi input.tcl]
         source [file join $::Achatina::lib_dir interfaces cgi output.tcl]
 
+        set interface_in [::Achatina::Interfaces::Cgi::Input new stdin]
         set interface_out [::Achatina::Interfaces::Cgi::Output new stdout]
 
         set config [::Achatina::Configuration new $config_file]
 
-        if {[catch {
-            set interface_in [::Achatina::Interfaces::Cgi::Input new stdin]
-            eval $code
-        } error_string] != 0} {
+        if {[catch {eval $code} error_string] != 0} {
 
             # 500
             set error_obj [::Achatina::Error new 500 $error_string $config]

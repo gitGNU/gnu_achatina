@@ -72,26 +72,6 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
                 }
             }
         }
-
-        if {![dict exists $headers HTTP_HOST]} {
-            error "HTTP_HOST is not present (is client not using HTTP/1.1?)"
-        }
-
-        if {![dict exists $headers PATH_INFO]} {
-            error "PATH_INFO is not present"
-        }
-
-        if {![dict exists $headers REQUEST_METHOD]} {
-            error "REQUEST_METHOD is not present"
-        }
-
-        if {![dict exists $headers SCRIPT_NAME]} {
-            error "SCRIPT_NAME is not present"
-        }
-
-        if {![dict exists $headers REMOTE_ADDR]} {
-            error "REMOTE_ADDR is not present"
-        }
     }
 
     method get_cookie {c} {
