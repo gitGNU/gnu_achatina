@@ -21,6 +21,10 @@ oo::class create ::Achatina::Interfaces::Httpd::Input {
         dict set headers PATH_INFO [dict get $headers SCRIPT_NAME]
         dict set headers REQUEST_METHOD [string tolower [dict get $headers REQUEST_METHOD]]
         dict set headers __PROTOCOL__ {http}
+
+        if {![dict exists $headers HTTP_HOST]} {
+            error "HTTP_HOST is not present (is client not using HTTP/1.1?)"
+        }
     }
 
     method get_cookie {c} {

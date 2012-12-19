@@ -58,14 +58,13 @@ oo::class create ::Achatina::Interfaces::Httpd {
                 $response_obj destroy
             }
 
-            if {[info exists request]} { $request destroy }
-            if {[info exists session]} { $session destroy }
-            if {[info exists router]}  { $router  destroy }
-            if {[info exists startup]} { $startup destroy }
-
+            if {[info exists request]     } { $request      destroy }
+            if {[info exists session]     } { $session      destroy }
+            if {[info exists router]      } { $router       destroy }
+            if {[info exists startup]     } { $startup      destroy }
+            if {[info exists interface_in]} { $interface_in destroy }
 
             $interface_out destroy
-            $interface_in destroy
 
             return
         }

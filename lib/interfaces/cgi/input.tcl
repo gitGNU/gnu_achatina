@@ -72,6 +72,10 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
                 }
             }
         }
+
+        if {![dict exists $headers HTTP_HOST]} {
+            error "HTTP_HOST is not present (is client not using HTTP/1.1?)"
+        }
     }
 
     method get_cookie {c} {
