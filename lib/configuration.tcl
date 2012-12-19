@@ -5,7 +5,6 @@
 
 # Class: ::Achatina::Configuration
 #
-# You shouldn't be interested with this class.
 # This is configuration class, it will be instantiated automatically when you create <::Achatina::Application> object.
 oo::class create ::Achatina::Configuration {
     # Constructor: new
@@ -78,13 +77,30 @@ oo::class create ::Achatina::Configuration {
         }
     }
 
-    # Function: get_dict
+    # Function: get_params
     #
     # Returns dictionary containing configuration values.
     #
     # It takes no arguments.
-    method get_dict {} {
+    method get_params {} {
         variable configuration_dict
         return $configuration_dict
+    }
+
+    # Function: get_param
+    #
+    # Returns string containing requested configuration param.
+    #
+    # Example:
+    #
+    # > $config get_param app httpd static_files_path
+    method get_param {args} {
+        variable configuration_dict
+
+        if {[dict exists $configuration_dict {*}$args]} {
+            return [dict get $configuration_dict {*}$args]
+        }
+
+        return
     }
 }

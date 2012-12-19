@@ -59,7 +59,7 @@ oo::class create ::Achatina::Application {
         set error_string {}
 
         set code {
-            if {[dict get $config app session secret_key] eq "cHaNgE_mE"} {
+            if {[$config get_param app session secret_key] eq "cHaNgE_mE"} {
                 error {Please change session's secret_key (app->session->secret_key option)}
             }
 

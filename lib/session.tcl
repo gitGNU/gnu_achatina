@@ -29,8 +29,8 @@ oo::class create ::Achatina::Session {
         variable config $config_
 
         set interface_in [$request get_interface_in__]
-        set cookie [$interface_in get_cookie [dict get $config app session cookie_name]]
-        set secret_key [dict get $config app session secret_key]
+        set cookie [$interface_in get_cookie [$config get_param app session cookie_name]]
+        set secret_key [$config get_param app session secret_key]
 
         # Is cookie present?
         if {($cookie ne "") && [dict exists $cookie b32] && [dict exists $cookie s]} {
@@ -38,14 +38,14 @@ oo::class create ::Achatina::Session {
 
             set params_base32 [dict get $cookie b32]
             set params_signature [dict get $cookie s]
-            set session_algorithm [dict get $config app session secret_key]
+            set session_algorithm [$config get_param app session secret_key]
             set remote_addr [$request get_header REMOTE_ADDR]
 
             # Replace all "-" with "=" to make this string valid BASE32
             regsub -all -- {-} $params_base32 {=} params_base32
 
             # Validate cookie's signature and decode BASE32-encoded body of cookie
-            switch [dict get $config app session algorithm] {
+            switch [$config get_param app session algorithm] {
                 sha256 {
                     package require sha2
 
@@ -143,7 +143,7 @@ oo::class create ::Achatina::Session {
         set remote_addr [$request get_header REMOTE_ADDR]
 
         # Sign cookie, note that we're using HMAC for signatures
-        switch [dict get $config app session algorithm] {
+        switch [$config get_param app session algorithm] {
             sha256 {
                 package require sha2
 
@@ -169,9 +169,9 @@ oo::class create ::Achatina::Session {
         dict set output s $params_signature
 
         # Calculate expiration date
-        set expiration_seconds [+ [clock seconds] [dict get $config app session seconds]]
+        set expiration_seconds [+ [clock seconds] [$config get_param app session seconds]]
 
         # Feed browser with tasty cookie ;)
-        $interface_out set_cookie [dict get $config app session cookie_name] $output $expiration_seconds
+        $interface_out set_cookie [$config get_param app session cookie_name] $output $expiration_seconds
     }
 }

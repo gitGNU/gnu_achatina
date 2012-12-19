@@ -52,9 +52,9 @@ oo::class create ::Achatina::Error {
         # Get numeric status code from status (for example: "404" from "404 Not Found")
         regexp {^\d+} $status status_code
 
-        if {[dict exists $config app error templates $status_code]} {
+        if {[$config get_param app error templates $status_code] ne ""} {
             # Custom error templates are set
-            set tmpl [dict get $config app error templates $status_code]
+            set tmpl [$config get_param app error templates $status_code]
         }
 
         if {$tmpl eq ""} {

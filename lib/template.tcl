@@ -39,8 +39,8 @@ oo::class create ::Achatina::Template {
         variable output {}
         variable variables {}
 
-        set ext [dict get $config app template extension]
-        set path [dict get $config app template path]
+        set ext [$config get_param app template extension]
+        set path [$config get_param app template path]
 
         if {([file pathtype $tmpl_file] eq "absolute") || ([file pathtype $tmpl_file] eq "volumerelative")} {
             set filename1 $tmpl_file

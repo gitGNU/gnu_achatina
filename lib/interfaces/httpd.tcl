@@ -16,20 +16,18 @@ oo::class create ::Achatina::Interfaces::Httpd {
         package require dandelion_plus
     }
 
-    method go {code_ startup_class_ config_file_} {
+    method go {code_ startup_class_ config_file} {
         variable code $code_
         variable startup_class $startup_class_
-        variable config_file $config_file_
         variable config {}
 
         source [file join $::Achatina::lib_dir interfaces httpd input.tcl]
         source [file join $::Achatina::lib_dir interfaces httpd output.tcl]
 
-        set config_obj [::Achatina::Configuration new $config_file]
-        set config [$config_obj get_dict]
-        set static_dir [file normalize [file join [file dirname [file normalize $::argv0]] [dict get $config app httpd static_files_path]]]
-        set bind [dict get $config app httpd bind]
-        set max_req [dict get $config app httpd max_request_size]
+        set config [::Achatina::Configuration new $config_file]
+        set static_dir [file normalize [file join [file dirname [file normalize $::argv0]] [$config get_param app httpd static_files_path]]]
+        set bind [$config get_param app httpd bind]
+        set max_req [$config get_param app httpd max_request_size]
 
         proc handle {sock headers settings body} {
             variable code

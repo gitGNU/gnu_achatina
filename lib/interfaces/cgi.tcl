@@ -22,8 +22,7 @@ oo::class create ::Achatina::Interfaces::Cgi {
         set interface_out [::Achatina::Interfaces::Cgi::Output new stdout]
         set interface_in [::Achatina::Interfaces::Cgi::Input new stdin]
 
-        set config_obj [::Achatina::Configuration new $config_file]
-        set config [$config_obj get_dict]
+        set config [::Achatina::Configuration new $config_file]
 
         if {[catch {eval $code} error_string] != 0} {
             # 500
