@@ -47,7 +47,7 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
 
         # Catch HTTP_* and SERVER_* variables
         foreach {k v} [array get ::env] {
-            if {[regexp {^HTTP_} $k] || [regexp {^SERVER_} $k]} {2
+            if {[regexp {^HTTP_} $k] || [regexp {^SERVER_} $k]} {
                 dict set headers $k $v
             }
         }
