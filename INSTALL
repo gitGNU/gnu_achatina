@@ -1,3 +1,5 @@
+Achatina requires Tcl 8.6 or newer and Tcllib (http://tcllib.sourceforge.net/).
+
 Installation of Achatina is very simple and straightforward. You only have
 to complete following two steps:
 
