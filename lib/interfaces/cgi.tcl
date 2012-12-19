@@ -24,8 +24,8 @@ oo::class create ::Achatina::Interfaces::Cgi {
         set config [::Achatina::Configuration new $config_file]
 
         if {[catch {
-            eval $code
             set interface_in [::Achatina::Interfaces::Cgi::Input new stdin]
+            eval $code
         } error_string] != 0} {
 
             # 500
