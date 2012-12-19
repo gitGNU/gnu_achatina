@@ -208,7 +208,7 @@ oo::class create ::Achatina::Response {
                 return
             }
 
-            if {[$router does_route_exist $redirect get]} {
+            if {($router ne "") && [$router does_route_exist $redirect get]} {
                 set url "$protocol://$http_host/$script_name$redirect"
 
                 $interface_out set_header Location $url

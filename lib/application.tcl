@@ -71,7 +71,7 @@ oo::class create ::Achatina::Application {
             $startup set_routes $router $config
 
             set response_obj [$router dispatch $request $session $config]
-            $response_obj output__ $session $request $interface_out
+            $response_obj output__ $session $request $router $interface_out
         }
 
         if {![info exists ::argv0]} {
