@@ -178,7 +178,7 @@ oo::class create ::Achatina::Response {
         set redirect $r
     }
 
-    method output__ {session request interface_out} {
+    method output__ {session request router interface_out} {
         variable contents
         variable headers
         variable redirect
@@ -194,8 +194,7 @@ oo::class create ::Achatina::Response {
 
         if {($redirect ne "") && ($request ne "")} {
             set protocol [$request get_header __PROTOCOL__]
-            set server_name [$request get_header SERVER_NAME]
-            set port [$request get_header SERVER_PORT]
+            set http_host [$request get_header HTTP_HOST]
             set script_name [$request get_header SCRIPT_NAME]
             set path [$request get_header PATH_INFO]
 
@@ -209,8 +208,8 @@ oo::class create ::Achatina::Response {
                 return
             }
 
-            if {[::router does_route_exist $redirect get]} {
-                set url "$protocol://$server_name:$port$script_name$redirect"
+            if {[$router does_route_exist $redirect get]} {
+                set url "$protocol://$http_host/$script_name$redirect"
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -220,7 +219,7 @@ oo::class create ::Achatina::Response {
             }
 
             if {[regexp {^/} $redirect]} {
-                set url "$protocol://$server_name:$port$redirect"
+                set url "$protocol://$http_host/$redirect"
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -229,7 +228,7 @@ oo::class create ::Achatina::Response {
                 return
             }
 
-            set url "$protocol://$server_name:$port$script_name$path/$redirect"
+            set url "$protocol://$http_host/$script_name$path/$redirect"
 
             $interface_out set_header Location $url
             $interface_out set_status {302 Found}

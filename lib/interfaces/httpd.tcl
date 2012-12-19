@@ -49,9 +49,9 @@ oo::class create ::Achatina::Interfaces::Httpd {
                 set response_obj [$error_obj get_response_obj]
 
                 if {[info exists session]} {
-                    $response_obj output__ $session {} $interface_out
+                    $response_obj output__ $session {} {} $interface_out
                 } else {
-                    $response_obj output__ {} {} $interface_out
+                    $response_obj output__ {} {} {} $interface_out
                 }
 
                 $error_obj destroy
