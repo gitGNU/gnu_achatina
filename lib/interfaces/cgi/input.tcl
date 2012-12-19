@@ -35,14 +35,14 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
 
         if {[info exists ::env(PATH_INFO)]} {
             dict set headers PATH_INFO $::env(PATH_INFO)
-        } else {
-            dict set headers PATH_INFO {/}
+        }
+
+        if {[info exists ::env(REMOTE_ADDR)]} {
+            dict set headers PATH_INFO $::env(REMOTE_ADDR)
         }
 
         if {[info exists ::env(REQUEST_METHOD)]} {
              dict set headers REQUEST_METHOD [string tolower $::env(REQUEST_METHOD)]
-        } else {
-            dict set headers REQUEST_METHOD get
         }
 
         # Catch HTTP_* and SERVER_* variables
@@ -75,6 +75,22 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
 
         if {![dict exists $headers HTTP_HOST]} {
             error "HTTP_HOST is not present (is client not using HTTP/1.1?)"
+        }
+
+        if {![dict exists $headers PATH_INFO]} {
+            error "PATH_INFO is not present"
+        }
+
+        if {![dict exists $headers REQUEST_METHOD]} {
+            error "REQUEST_METHOD is not present"
+        }
+
+        if {![dict exists $headers SCRIPT_NAME]} {
+            error "SCRIPT_NAME is not present"
+        }
+
+        if {![dict exists $headers REMOTE_ADDR]} {
+            error "REMOTE_ADDR is not present"
         }
     }
 

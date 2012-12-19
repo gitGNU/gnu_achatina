@@ -142,7 +142,7 @@ proc ::dandelion_plus::get_initial {sock settings {line {}}} {
 		deny $sock 404 $settings
 		return
 	}
-	chan event $sock readable [list ::dandelion_plus::get_headers $sock $size [dict create REQUEST_METHOD [lindex $line 0] REQUEST_URI $uri SCRIPT_NAME [decode $path] QUERY_STRING $query SERVER_PROTOCOL [lindex $line 2]] $settings {}]
+	chan event $sock readable [list ::dandelion_plus::get_headers $sock $size [dict create REQUEST_METHOD [lindex $line 0] REQUEST_URI $uri PATH_INFO [decode $path] SCRIPT_NAME / SERVER_PORT [dict get $settings port] QUERY_STRING $query SERVER_PROTOCOL [lindex $line 2]] $settings {}]
 	return
 }
 

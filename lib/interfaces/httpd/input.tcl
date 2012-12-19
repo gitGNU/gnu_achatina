@@ -18,7 +18,6 @@ oo::class create ::Achatina::Interfaces::Httpd::Input {
 
         ### set headers ###
         dict set headers REMOTE_ADDR [lindex [fconfigure $sock -peername] 0]
-        dict set headers PATH_INFO [dict get $headers SCRIPT_NAME]
         dict set headers REQUEST_METHOD [string tolower [dict get $headers REQUEST_METHOD]]
         dict set headers __PROTOCOL__ {http}
 
