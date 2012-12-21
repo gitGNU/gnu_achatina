@@ -7,6 +7,8 @@ namespace eval ::Achatina::Interfaces::Cgi {}
 
 oo::class create ::Achatina::Interfaces::Cgi::Input {
     constructor {handle} {
+        namespace path ::tcl::mathop
+
         package require ncgi
 
         variable headers {}
@@ -95,11 +97,11 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
 
         if {[regexp {^multipart/form-data} [::ncgi::type]]} {
             # multipart/form-data
-            for {set i 0} {$i < [llength $nvlist]} {set i [expr {$i+2}]} {
+            for {set i 0} {$i < [llength $nvlist]} {set i [+ i 2]} {
                 set values_list {}
                 set key [lindex $nvlist $i]
-                set value [lindex [lindex $nvlist [expr {$i + 1}]] 1]
-                set metadata [lindex [lindex $nvlist [expr {$i + 1}]] 0]
+                set value [lindex [lindex $nvlist [$i + 1]] 1]
+                set metadata [lindex [lindex $nvlist [+ $i 1]] 0]
 
                 # Note that $metadata is already formatted like dict
                 set value_dict [dict create value $value metadata $metadata]
@@ -115,10 +117,10 @@ oo::class create ::Achatina::Interfaces::Cgi::Input {
            }
         } else {
             # application/x-www-form-urlencoded and GET
-            for {set i 0} {$i < [llength $nvlist]} {set i [expr {$i+2}]} {
+            for {set i 0} {$i < [llength $nvlist]} {set i [+ $i 2]} {
                 set values_list {}
                 set key [lindex $nvlist $i]
-                set value [lindex $nvlist [expr {$i + 1}]]
+                set value [lindex $nvlist [+ $i 1]]
                 set value_dict [dict create value $value metadata {}]
 
                 # Add additional value to already existing key
