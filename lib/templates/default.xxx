@@ -12,6 +12,6 @@
         <p>
             <:= $status :>:
         <p>
-            <pre><:= $err_body :></pre>
+            <pre><:= $err :></pre>
     </body>
 </html>

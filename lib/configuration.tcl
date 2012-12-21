@@ -22,14 +22,19 @@ oo::class create ::Achatina::Configuration {
         package require yaml
 
         if {$config_file ne ""} {
+            set fp {}
             set filename [file normalize [file join [file dirname [file normalize $::argv0]] $config_file]]
 
-            catch {set fp [open $filename r]}
+            try {
+                set fp [open $filename r]
+            }
 
-            set yaml_file [read $fp]
-            close $fp
+            if {$fp ne ""} {
+                set yaml_file [read $fp]
+                close $fp
 
-            set configuration_dict [::yaml::yaml2dict -stream $yaml_file]
+                set configuration_dict [::yaml::yaml2dict -stream $yaml_file]
+            }
         }
 
         if {![dict exists $configuration_dict app httpd static_files_path]} {

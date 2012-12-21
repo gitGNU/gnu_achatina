@@ -24,10 +24,11 @@ oo::class create ::Achatina::Interfaces::Cgi {
 
         set config [::Achatina::Configuration new $config_file]
 
-        if {[catch {eval $code} error_string] != 0} {
-
+        try {
+            eval $code
+        } on error {err opts} {
             # 500
-            set error_obj [::Achatina::Error new 500 $error_string $config]
+            set error_obj [::Achatina::Error new 500 $err $opts $config]
             set response_obj [$error_obj get_response_obj]
 
             if {[info exists session]} {

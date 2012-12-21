@@ -12,6 +12,6 @@
         <p>
             404:
         <p>
-            <pre><:= $err_body :></pre>
+            <pre><:= $err :></pre>
     </body>
 </html>

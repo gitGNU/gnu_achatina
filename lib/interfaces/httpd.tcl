@@ -43,9 +43,11 @@ oo::class create ::Achatina::Interfaces::Httpd {
             set interface_out [::Achatina::Interfaces::Httpd::Output new $sock]
             set interface_in [::Achatina::Interfaces::Httpd::Input new $sock $headers $settings $body]
 
-            if {[catch {eval $code} error_string] != 0} {
+            try {
+                eval $code
+            } on error {err opts} {
                 # 500
-                set error_obj [::Achatina::Error new 500 $error_string $config]
+                set error_obj [::Achatina::Error new 500 $err $opts $config]
                 set response_obj [$error_obj get_response_obj]
 
                 if {[info exists session]} {

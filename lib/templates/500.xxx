@@ -12,10 +12,10 @@
         <p>
             500:
         <p>
-            <pre><:= $err_body :></pre>
+            <pre><:= $err :></pre>
         <p>
-            Trace:
+            Options:
         <p>
-            <pre><:= $::errorInfo :></pre>
+            <pre><:= $opts :></pre>
     </body>
 </html>

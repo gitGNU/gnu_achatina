@@ -12,6 +12,6 @@
         <p>
             Specified error page could not be loaded, additionally following error happened: 403:
         <p>
-            <pre><:= $err_body :></pre>
+            <pre><:= $err :></pre>
     </body>
 </html>

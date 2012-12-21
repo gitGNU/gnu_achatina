@@ -50,12 +50,18 @@ oo::class create ::Achatina::Template {
             set filename2 [file normalize [file join [file dirname [file normalize $::argv0]] $path "$tmpl_file.$ext"]]
         }
 
-        if {[catch {set fp [open $filename1 r]}] && [catch {set fp [open $filename2 r]}]} {
-            error {TEMPLATE NOT FOUND}
-        } else {
-            set contents [read $fp]
-            close $fp
+        try {
+            set fp [open $filename1 r]
+        } on error err {
+            try {
+                set fp [open $filename2 r]
+            } on error err {
+                error {Template not found}
+            }
         }
+
+        set contents [read $fp]
+        close $fp
     }
 
     method _compile {} {

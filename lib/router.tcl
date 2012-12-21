@@ -196,18 +196,22 @@ oo::class create ::Achatina::Router {
                     }
                 }
 
-                if {[catch {info object isa typeof $response ::Achatina::Response}]} {
+                set response_obj {}
+
+                try {
+                    info object isa typeof $response ::Achatina::Response
+                } on error err {
                     set response_obj [::Achatina::Response new $response]
-                } else {
-                    set response_obj $response
                 }
+
+                if {$response_obj eq ""} { set response_obj $response }
 
                 return $response_obj
             }
         }
 
         # 404
-        set error_obj [::Achatina::Error new 404 {Not found} $config]
+        set error_obj [::Achatina::Error new 404 {Not found} {} $config]
         set response_obj [$error_obj get_response_obj]
 
         return $response_obj

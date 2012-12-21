@@ -28,9 +28,10 @@ oo::class create ::Achatina::Error {
     #   - Status code
     #   - Error contents
     #   - Configuration dict
-    constructor {status_ contents_ config_} {
+    constructor {status_ contents_ options_ config_} {
         variable status $status_
         variable contents $contents_
+        variable options $options_
         variable config $config_
     }
 
@@ -43,6 +44,7 @@ oo::class create ::Achatina::Error {
         variable config
         variable contents
         variable status
+        variable options
 
         set tmpl {}
         set tmpl_obj {}
@@ -77,38 +79,45 @@ oo::class create ::Achatina::Error {
                 }
             }
 
-            if {([catch {set tmpl_obj [::Achatina::Template new $tmpl $config]} errstr] != 0)} {
-                # Unable to load built-in template
-
-                set response_obj [::Achatina::Response new "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
-                $response_obj set_status 500
-                return $response_obj
-            }
-        } elseif {([catch {set tmpl_obj [::Achatina::Template new $tmpl $config]}] != 0)} {
-            # Unable to load specified template
-            switch -exact -- $status {
-                500 {
-                    set tmpl [file join $::Achatina::lib_dir templates 500_nf.xxx]
-                }
-
-                404 {
-                    set tmpl [file join $::Achatina::lib_dir templates 404_nf.xxx]
-                }
-
-                403 {
-                    set tmpl [file join $::Achatina::lib_dir templates 403_nf.xxx]
-                }
-
-                default {
-                    set tmpl [file join $::Achatina::lib_dir templates default_nf.xxx]
-                }
-            }
-
-            if {([catch {set tmpl_obj [::Achatina::Template new $tmpl $config]}] != 0)} {
+            try {
+                set tmpl_obj [::Achatina::Template new $tmpl $config]
+            } on error {err} {
                 # Unable to load built-in template
                 set response_obj [::Achatina::Response new "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
                 $response_obj set_status 500
                 return $response_obj
+            }
+        } else {
+            try {
+                set tmpl_obj [::Achatina::Template new $tmpl $config]
+            } on error {err} {
+                # Unable to load specified template
+                switch -exact -- $status {
+                    500 {
+                        set tmpl [file join $::Achatina::lib_dir templates 500_nf.xxx]
+                    }
+
+                    404 {
+                        set tmpl [file join $::Achatina::lib_dir templates 404_nf.xxx]
+                    }
+
+                    403 {
+                        set tmpl [file join $::Achatina::lib_dir templates 403_nf.xxx]
+                    }
+
+                    default {
+                        set tmpl [file join $::Achatina::lib_dir templates default_nf.xxx]
+                    }
+                }
+
+                try {
+                    set tmpl_obj [::Achatina::Template new $tmpl $config]
+                } on error {err} {
+                    # Unable to load built-in template
+                    set response_obj [::Achatina::Response new "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
+                    $response_obj set_status 500
+                    return $response_obj
+                }
             }
         }
 
@@ -116,7 +125,8 @@ oo::class create ::Achatina::Error {
 
         $response_obj set_status $status
 
-        $tmpl_obj set_param err_body $contents
+        $tmpl_obj set_param err $contents
+        $tmpl_obj set_param opts $options
         # Normalize status
         $tmpl_obj set_param status [$response_obj get_status]
 
