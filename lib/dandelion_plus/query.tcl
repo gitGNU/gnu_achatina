@@ -234,7 +234,6 @@ proc ::query_plus::bake {name value {expires {}} {path /} {domain {}} {secure 0}
     append cookie \;path=$path
     if {$domain ne {}} {append cookie \;domain=$domain}
     if {$secure} {append cookie ;secure}
-    puts cookie:$cookie
     return $cookie
 }
 
@@ -242,7 +241,6 @@ proc ::query_plus::get_cookies {req_headers} {
     if {![dict exists $req_headers HTTP_COOKIE]} { return }
     set cookies [dict create]
     foreach cookie [split [dict get $req_headers HTTP_COOKIE] \;] {
-        puts cookie:$cookie
         lassign [split $cookie =] name value
         set name [string trim $name]
         set value [string trim $value]
