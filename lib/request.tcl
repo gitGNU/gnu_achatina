@@ -38,6 +38,19 @@ oo::class create ::Achatina::Request {
         if {![dict exists $headers REMOTE_ADDR]} {
             error "REMOTE_ADDR is not present"
         }
+
+        dict set headers __URL_BASE__ [my normalize_url "[dict get $headers __PROTOCOL__]://[dict get $headers HTTP_HOST]/[dict get $headers SCRIPT_NAME]/"]
+        dict set headers __URL_REAL_BASE__ [my normalize_url "[dict get $headers __PROTOCOL__]://[dict get $headers HTTP_HOST]/"]
+    }
+
+    method normalize_url {u} {
+        if {[regexp {([a-zA-Z]+://)(.+)} $u {} protocol address]} {
+            regsub -all {/+} $address {/} address
+            return $protocol$address
+        }
+
+        regsub -all {/+} $u {/} u
+        return $u
     }
 
     method _join_params {} {
@@ -67,7 +80,8 @@ oo::class create ::Achatina::Request {
     #
     # It returns specified header value. If header does not exist
     # it returns empty string. You can rely on existance of REMOTE_ADDR,
-    # REQUEST_METHOD, __PROTOCOL__, SCRIPT_NAME and HTTP_HOST headers.
+    # REQUEST_METHOD, __PROTOCOL__, SCRIPT_NAME, __URL_BASE__,
+    # __URL_REAL_BASE__ and HTTP_HOST headers.
     #
     # Parameters:
     #

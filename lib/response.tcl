@@ -178,16 +178,6 @@ oo::class create ::Achatina::Response {
         set redirect $r
     }
 
-    method _normalize_url {u} {
-        if {[regexp {([a-zA-Z]+://)(.+)} $u {} protocol address]} {
-            regsub -all {/+} $address {/} address
-            return $protocol$address
-        }
-
-        regsub -all {/+} $u {/} u
-        return $u
-    }
-
     method output__ {session request router interface_out} {
         variable contents
         variable headers
@@ -210,7 +200,7 @@ oo::class create ::Achatina::Response {
 
             if {[regexp {^[a-zA-Z]+://} $redirect]} {
                 set url $redirect
-                set url [my _normalize_url $url]
+                set url [$request _normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -220,8 +210,8 @@ oo::class create ::Achatina::Response {
             }
 
             if {($router ne "") && [$router does_route_exist $redirect get]} {
-                set url "$protocol://$http_host/$script_name$redirect"
-                set url [my _normalize_url $url]
+                set url "$protocol://$http_host/$script_name/$redirect"
+                set url [$request _normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -232,7 +222,7 @@ oo::class create ::Achatina::Response {
 
             if {[regexp {^/} $redirect]} {
                 set url "$protocol://$http_host/$redirect"
-                set url [my _normalize_url $url]
+                set url [$request _normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -241,8 +231,8 @@ oo::class create ::Achatina::Response {
                 return
             }
 
-            set url "$protocol://$http_host/$script_name$path/$redirect"
-            set url [my _normalize_url $url]
+            set url "$protocol://$http_host/$script_name/$path/$redirect"
+            set url [$request _normalize_url $url]
 
             $interface_out set_header Location $url
             $interface_out set_status {302 Found}
