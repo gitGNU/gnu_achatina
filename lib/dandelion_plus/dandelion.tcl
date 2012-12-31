@@ -257,14 +257,14 @@ proc ::dandelion_plus::get_body {sock size headers settings {body {}}} {
 proc ::dandelion_plus::try_file {sock headers settings} {
 	#get mime type. If it does not have a mime type do not serve and go to handler
 	variable mime
-	set ext [file extension [dict get $headers SCRIPT_NAME]]
+	set ext [file extension [dict get $headers PATH_INFO]]
 	if {[dict exists $mime $ext]} {
 		set mime_type [dict get $mime $ext]
 	} else {
-		return 0
+		set mime_type {application/octet-stream}
 	}
 	#normalised request path
-	set path [file normalize [file join [dict get $settings doc_root] [string trimleft [dict get $headers SCRIPT_NAME] /]]]
+	set path [file normalize [file join [dict get $settings doc_root] [string trimleft [dict get $headers PATH_INFO] /]]]
 	#ensure within doc_root
 	if {[dict get $settings check_dir] && (![string equal [string range $path 0 [- [string length [dict get $settings doc_root]] 1]] [dict get $settings doc_root]])} {
 		deny $sock 404 $settings
