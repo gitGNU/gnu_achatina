@@ -1,3 +1,8 @@
+# Copyright (c) 2012, 2013 Tomasz Konojacki
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 # Class: ::Achatina::Docs::Deployment
 #
 # There are three ways to deploy Achatina application: you can use built-in httpd server,
