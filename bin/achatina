@@ -57,6 +57,15 @@ set config_yml {
     aGF0IGxvbmdlciBpcyBiZXR0ZXIhCiAgICBzZWNyZXRfa2V5OiBjSGFOZ0VfbUUK
 }
 
+set htaccess {
+    UmV3cml0ZUVuZ2luZSBPbgpSZXdyaXRlQ29uZCAle1JFUVVFU1RfRklMRU5BTUV9ICEtZgpSZXdy
+    aXRlUnVsZSBeKC4qKSQgL3N0YXRpYy8kMSBbUVNBLExdCgo8RmlsZXMgIi5odGFjY2VzcyI+CiAg
+    ICBPcmRlciBBbGxvdyxEZW55CiAgICBEZW55IGZyb20gYWxsCjwvRmlsZXM+Cgo8RmlsZXMgIndl
+    Yi5jb25maWciPgogICAgT3JkZXIgQWxsb3csRGVueQogICAgRGVueSBmcm9tIGFsbAo8L0ZpbGVz
+    PgoKPEZpbGVzICJjb25maWcueW1sIj4KICAgIE9yZGVyIEFsbG93LERlbnkKICAgIERlbnkgZnJv
+    bSBhbGwKPC9GaWxlcz4=
+}
+
 if {[llength $::argv] != 1} {
     puts "Usage:\n"
     puts "achatina.tcl project_name"
@@ -84,3 +93,8 @@ close $fp
 set fp [open [file join [lindex $::argv 0] config.yml] w]
 puts -nonewline $fp [::base64::decode $config_yml]
 close $fp
+
+set fp [open [file join [lindex $::argv 0] .htaccess] w]
+puts -nonewline $fp [::base64::decode $htaccess]
+close $fp
+
