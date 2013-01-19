@@ -54,7 +54,15 @@ oo::class create ::Achatina::Router {
     # (example route with placeholder "bar": "/foo/:bar". For this route requests like
     # "/foo/fsakopads" and "/foo/123" will match.
     #
+    # You can escape placeholder using "\" character. For example, path "/foo/\:ph"
+    # does not contain placeholder.
+    #
     # Value of placeholder can be retrieved using <::Achatina::Request> object.
+    #
+    # Parameters:
+    #
+    #   - Route path
+    #   - Name of handler class (it will be constructed by router)
     method add_route {path class_} {
         variable routes
 
@@ -69,8 +77,14 @@ oo::class create ::Achatina::Router {
             lappend placeholders_keys [lindex $results $i]
         }
 
-        set route_regexp ""
-        regsub -all {/:(\w+)} $path {/(\w+)} route_regexp;
+        set route_regexp [my _quote_regexp $path]
+
+        # Replace placeholders with (\w+), this regexp will honour placeholder
+        # escaping with backslash
+        regsub -all {/(?!\\\\)\\:(\w+)} $route_regexp {/(\w+)} route_regexp;
+        # $route_regexp may contain something like this: {/\\\:foobar}
+        regsub -all {/\\\\\\:} $route_regexp {/\:} route_regexp;
+
         set route_regexp "^$route_regexp\$"
 
         set class_methods [info class methods $class_]
@@ -105,6 +119,7 @@ oo::class create ::Achatina::Router {
             lappend routes $rt
         }
     }
+
     # Function: does_route_exist
     #
     # It checks whether specified route exists. It returns boolean value, "true"
@@ -145,6 +160,10 @@ oo::class create ::Achatina::Router {
         }
 
         return false;
+    }
+
+    method _quote_regexp {s} {
+        return [regsub -all -- {\W} $s {\\\0}]
     }
 
     method dispatch {request session config} {
