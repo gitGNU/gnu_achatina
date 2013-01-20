@@ -272,7 +272,7 @@ proc ::dandelion_plus::try_file {sock headers settings} {
 		return 1
 	}
 	#open file, if error, return 0 so handler is used. Return 404 or fallback to handler depending on settings.
-	if {[catch {file stat $path attribs}]} {
+	if {![file readable $path] || ![file isfile $path] || ([catch {file stat $path attribs}] != 0)} {
 		if {[dict get $settings static_fail]} {
 			deny $sock 404 $settings
 			return 1
