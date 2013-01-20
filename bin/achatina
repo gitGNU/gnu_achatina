@@ -107,7 +107,11 @@ if {[llength $::argv] != 1} {
 
 puts "Creating directories..."
 
-file mkdir [lindex $::argv 0] [file join [lindex $::argv 0] bin] [file join [lindex $::argv 0] lib] [file join [lindex $::argv 0] views]
+file mkdir [lindex $::argv 0]                   \
+           [file join [lindex $::argv 0] bin]   \
+           [file join [lindex $::argv 0] lib]   \
+           [file join [lindex $::argv 0] views] \
+           [file join [lindex $::argv 0] static]
 
 puts "Creating files..."
 
