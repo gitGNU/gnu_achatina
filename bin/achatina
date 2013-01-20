@@ -101,7 +101,7 @@ set webconfig {
 
 if {[llength $::argv] != 1} {
     puts "Usage:\n"
-    puts "achatina.tcl project_name"
+    puts "achatina project_name"
     exit 1
 }
 
