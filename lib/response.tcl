@@ -200,7 +200,7 @@ oo::class create ::Achatina::Response {
 
             if {[regexp {^[a-zA-Z]+://} $redirect]} {
                 set url $redirect
-                set url [$request _normalize_url $url]
+                set url [$request normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -211,7 +211,7 @@ oo::class create ::Achatina::Response {
 
             if {($router ne "") && [$router does_route_exist $redirect get]} {
                 set url "$protocol://$http_host/$script_name/$redirect"
-                set url [$request _normalize_url $url]
+                set url [$request normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -222,7 +222,7 @@ oo::class create ::Achatina::Response {
 
             if {[regexp {^/} $redirect]} {
                 set url "$protocol://$http_host/$redirect"
-                set url [$request _normalize_url $url]
+                set url [$request normalize_url $url]
 
                 $interface_out set_header Location $url
                 $interface_out set_status {302 Found}
@@ -232,7 +232,7 @@ oo::class create ::Achatina::Response {
             }
 
             set url "$protocol://$http_host/$script_name/$path/$redirect"
-            set url [$request _normalize_url $url]
+            set url [$request normalize_url $url]
 
             $interface_out set_header Location $url
             $interface_out set_status {302 Found}
