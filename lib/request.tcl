@@ -79,9 +79,15 @@ oo::class create ::Achatina::Request {
     # Function: get_header
     #
     # It returns specified header value. If header does not exist
-    # it returns empty string. You can rely on existance of REMOTE_ADDR,
-    # REQUEST_METHOD, __PROTOCOL__, SCRIPT_NAME, __URL_BASE__,
-    # __URL_REAL_BASE__ and HTTP_HOST headers.
+    # it returns empty string. You can rely on existence of following headers:
+    #
+    # > REMOTE_ADDR
+    # > REQUEST_METHOD
+    # > __PROTOCOL__
+    # > SCRIPT_NAME
+    # > __URL_BASE__
+    # > __URL_REAL_BASE__ 
+    # > HTTP_HOST
     #
     # Parameters:
     #
