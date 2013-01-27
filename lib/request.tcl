@@ -49,8 +49,7 @@ oo::class create ::Achatina::Request {
             return $protocol$address
         }
 
-        regsub -all {/+} $u {/} u
-        return $u
+        return [regsub -all {/+} $u {/}]
     }
 
     method _join_params {} {
