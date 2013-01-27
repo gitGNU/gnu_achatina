@@ -68,9 +68,10 @@ oo::class create ::Achatina::Request {
         if {$all_params eq ""} {my _join_params}
 
         dict for {k v} $all_params {
-            set a [lindex $v 0]
-            if {[dict exists $a value]} {
-                dict set params_without_meta $k [dict get $a value]
+            # We only use first value, for sake of simplicity
+            set first_value [lindex $v 0]
+            if {[dict exists $first_value value]} {
+                dict set params_without_meta $k [dict get $first_value value]
             }
         }
     }
