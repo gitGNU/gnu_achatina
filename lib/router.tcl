@@ -59,12 +59,27 @@ oo::class create ::Achatina::Router {
     #
     # Value of placeholder can be retrieved using <::Achatina::Request> object.
     #
+    # Arguments to this method must form valid dictionary.
+    #
+    # Usage:
+    #
+    # > $router add_route -path / -class ::Foo::Bar
+    #
     # Parameters:
     #
-    #   - Route path
-    #   - Name of handler class (it will be constructed by router)
-    method add_route {path class_} {
+    #   - path - Route path
+    #   - class - Name of handler class (it will be constructed by router)
+    method add_route {args} {
         variable routes
+
+        # Validate arguments
+        if {[catch {set path [dict get $args -path]}]} {
+            error "Invalid arguments to ::Achatina::Router::add_route"
+        }
+
+        if {[catch {set class_ [dict get $args -class]}]} {
+            error "Invalid arguments to ::Achatina::Router::add_route"
+        }
 
         # List of named placeholders
         set placeholders_keys ""
@@ -220,7 +235,7 @@ oo::class create ::Achatina::Router {
                 try {
                     info object isa typeof $response ::Achatina::Response
                 } on error err {
-                    set response_obj [::Achatina::Response new $response]
+                    set response_obj [::Achatina::Response new -contents $response]
                 }
 
                 if {$response_obj eq ""} { set response_obj $response }

@@ -23,12 +23,36 @@ oo::class create ::Achatina::Error {
     #
     # Creates error object.
     #
+    # Arguments to this method must form valid dictionary.
+    #
+    # Usage:
+    # 
+    # > ::Achatina::Application new -status {404} -contents {Not Found} -options {} -config $config
+    #
     # Parameters:
     #
-    #   - Status code
-    #   - Error contents
-    #   - Configuration dict
-    constructor {status_ contents_ options_ config_} {
+    #   - status - Status code
+    #   - contents - Error contents
+    #   - options - Error options (returned by try {} on error)
+    #   - config - <::Achatina::Configuration> object
+    constructor {args} {
+        # Validate arguments
+        if {[catch {set status_ [dict get $args -status]}]} {
+            error "Invalid arguments to ::Achatina::Error constructor"
+        }
+
+        if {[catch {set contents_ [dict get $args -contents]}]} {
+            error "Invalid arguments to ::Achatina::Error constructor"
+        }
+
+        if {[catch {set options_ [dict get $args -options]}]} {
+            error "Invalid arguments to ::Achatina::Error constructor"
+        }
+
+        if {[catch {set config_ [dict get $args -config]}]} {
+            error "Invalid arguments to ::Achatina::Error constructor"
+        }
+
         variable status $status_
         variable contents $contents_
         variable options $options_
@@ -80,16 +104,16 @@ oo::class create ::Achatina::Error {
             }
 
             try {
-                set tmpl_obj [::Achatina::Template new $tmpl $config]
+                set tmpl_obj [::Achatina::Template new -filename $tmpl -config $config]
             } on error {err} {
                 # Unable to load built-in template
-                set response_obj [::Achatina::Response new "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
+                set response_obj [::Achatina::Response new -contents "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
                 $response_obj set_status 500
                 return $response_obj
             }
         } else {
             try {
-                set tmpl_obj [::Achatina::Template new $tmpl $config]
+                set tmpl_obj [::Achatina::Template new -filename $tmpl -config $config]
             } on error {err} {
                 # Unable to load specified template
                 switch -exact -- $status {
@@ -111,10 +135,10 @@ oo::class create ::Achatina::Error {
                 }
 
                 try {
-                    set tmpl_obj [::Achatina::Template new $tmpl $config]
+                    set tmpl_obj [::Achatina::Template new -filename $tmpl -config $config]
                 } on error {err} {
                     # Unable to load built-in template
-                    set response_obj [::Achatina::Response new "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
+                    set response_obj [::Achatina::Response new -contents "Your Achatina installation is broken, could not load &quo;$tmpl&quo;"]
                     $response_obj set_status 500
                     return $response_obj
                 }

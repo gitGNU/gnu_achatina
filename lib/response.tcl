@@ -24,18 +24,24 @@ oo::class create ::Achatina::Response {
     # Creates response object. You don't have to specify contents when constructing object,
     # you can specify it later using <set_contents>.
     #
+    # Arguments to this method must form valid dictionary.
+    #
+    # Usage:
+    #
+    # > set response [::Achatina::Response new]
+    # > # or:
+    # > set response [::Achatina::Response new -contents {foobar}]
+    #
     # Parameters:
     #
-    #   - (optional) Contents
+    #   - (optional) contents - Contents
     constructor {args} {
         variable contents {}
         variable headers {}
         variable redirect {}
         variable status {}
 
-        if {[llength $args] == 1} {
-            set contents [lindex $args 0]
-        }
+        catch {set contents [dict get $args -contents]}
     }
 
     # Function: set_contents

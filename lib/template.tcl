@@ -27,10 +27,16 @@ oo::class create ::Achatina::Template {
     #
     # It construct template object and loads specified template file.
     #
+    # Arguments to this method must form valid dictionary.
+    #
+    # Usage:
+    # 
+    # > set tmpl [::Achatina::Template new -filename a.xxx -config $config]
+    #
     # Parameters:
-    #   - Path to template file (either absolute or relative to app->template->path configuration setting)
-    #   - Configuration
-    constructor {tmpl_file config} {
+    #   - filename - Path to template file (either absolute or relative to app->template->path configuration setting)
+    #   - config - <::Achatina::Configuration> object
+    constructor {args} {
         namespace path ::tcl::mathop
 
         variable path {}
@@ -38,6 +44,15 @@ oo::class create ::Achatina::Template {
         variable compiled {}
         variable output {}
         variable variables {}
+
+        # Validate arguments
+        if {[catch {set tmpl_file [dict get $args -filename]}]} {
+            error "Invalid arguments to ::Achatina::Template constructor"
+        }
+
+        if {[catch {set config [dict get $args -config]}]} {
+            error "Invalid arguments to ::Achatina::Template constructor"
+        }
 
         set ext [$config get_param app template extension]
         set path [$config get_param app template path]

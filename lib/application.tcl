@@ -42,7 +42,7 @@ namespace eval ::Achatina {
 # >     }
 # > }
 # >
-# > set application [Achatina::Application new {::Foobar} {../config.yml}]
+# > set application [::Achatina::Application new -class {::Foobar} -config {../config.yml}]
 #
 # Note that ::Class1 and ::Class2 have to implement at least one of following methods :
 # "do_get", "do_post" or "do_all". Class ::Fobar have to implement "set_routes".
@@ -51,12 +51,27 @@ oo::class create ::Achatina::Application {
     #
     # Creates application.
     #
+    # Arguments to this method must form valid dictionary.
+    #
+    # Usage:
+    # 
+    # > ::Achatina::Application new -class class_name -config config_object
+    #
     # Parameters:
     #
-    #   - Name of your application's startup class
-    #   - Path to configuration file
-    constructor {startup_class config_file} {
+    #   - class_name - Name of your application's startup class
+    #   - config_object - Path to configuration file
+    constructor {args} {
         set error_string {}
+
+        # Validate arguments
+        if {[catch {set config_file [dict get $args -config]}]} {
+            error "Invalid arguments to ::Achatina::Application constructor"
+        }
+
+        if {[catch {set startup_class [dict get $args -class]}]} {
+            error "Invalid arguments to ::Achatina::Application constructor"
+        }
 
         set code {
             if {[$config get_param app session secret_key] eq "cHaNgE_mE"} {

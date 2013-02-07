@@ -47,7 +47,7 @@ oo::class create ::Achatina::Interfaces::Httpd {
                 eval $code
             } on error {err opts} {
                 # 500
-                set error_obj [::Achatina::Error new 500 $err $opts $config]
+                set error_obj [::Achatina::Error new -status 500 -contents $err -options $opts -config $config]
                 set response_obj [$error_obj get_response_obj]
 
                 if {[info exists session]} {
