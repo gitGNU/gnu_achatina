@@ -16,15 +16,28 @@ oo::class create ::Achatina::Interfaces::Httpd {
         package require dandelion_plus
     }
 
-    method go {code_ startup_class_ config_file} {
-        variable code $code_
-        variable startup_class $startup_class_
+    method go {args} {
+        variable code {}
+        variable startup_class {}
         variable config {}
+
+        # Validate arguments, note that potential error will not be catched by anything
+        if {[catch {set code [dict get $args -code]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::go"
+        }
+
+        if {[catch {set startup_class [dict get $args -class]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::go"
+        }
+
+        if {[catch {set config_file [dict get $args -config_file]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::go"
+        }
 
         source [file join $::Achatina::lib_dir interfaces httpd input.tcl]
         source [file join $::Achatina::lib_dir interfaces httpd output.tcl]
 
-        set config [::Achatina::Configuration new $config_file]
+        set config [::Achatina::Configuration new -config_file $config_file]
         set static_dir [file normalize [file join [file dirname [file normalize $::argv0]] [$config get_param app httpd static_files_path]]]
         set bind [$config get_param app httpd bind]
         set max_req [$config get_param app httpd max_request_size]
@@ -40,8 +53,8 @@ oo::class create ::Achatina::Interfaces::Httpd {
 
             # File not found, try to find appropriate route
 
-            set interface_out [::Achatina::Interfaces::Httpd::Output new $sock]
-            set interface_in [::Achatina::Interfaces::Httpd::Input new $sock $headers $settings $body]
+            set interface_out [::Achatina::Interfaces::Httpd::Output new -sock $sock]
+            set interface_in [::Achatina::Interfaces::Httpd::Input new -sock $sock -headers $headers -settings $settings -body $body]
 
             try {
                 eval $code
@@ -51,9 +64,9 @@ oo::class create ::Achatina::Interfaces::Httpd {
                 set response_obj [$error_obj get_response_obj]
 
                 if {[info exists session]} {
-                    $response_obj output__ $session {} {} $interface_out
+                    $response_obj output__ -session $session -interface_out $interface_out
                 } else {
-                    $response_obj output__ {} {} {} $interface_out
+                    $response_obj output__ -interface_out $interface_out
                 }
 
                 $error_obj destroy

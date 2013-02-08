@@ -86,7 +86,7 @@ oo::class create ::Achatina::Application {
             $startup set_routes $router $config
 
             set response_obj [$router dispatch $request $session $config]
-            $response_obj output__ $session $request $router $interface_out
+            $response_obj output__ -session $session -request $request -router $router -interface_out $interface_out
         }
 
         if {![info exists ::argv0]} {
@@ -101,7 +101,7 @@ oo::class create ::Achatina::Application {
             source [file join $::Achatina::lib_dir interfaces cgi.tcl]
 
             set interface [::Achatina::Interfaces::Cgi new]
-            $interface go $code $startup_class $config_file
+            $interface go -code $code -class $startup_class -config_file $config_file
         } else {
             set ::Achatina::is_cgi flase
             set ::Achatina::is_httpd true
@@ -110,7 +110,7 @@ oo::class create ::Achatina::Application {
             source [file join $::Achatina::lib_dir interfaces httpd.tcl]
 
             set interface [::Achatina::Interfaces::Httpd new]
-            $interface go $code $startup_class $config_file
+            $interface go -code $code -class $startup_class -config_file $config_file
         }
 
 

@@ -184,14 +184,29 @@ oo::class create ::Achatina::Response {
         set redirect $r
     }
 
-    method output__ {session request router interface_out} {
+    method output__ {args} {
         variable contents
         variable headers
         variable redirect
         variable status
 
+        set session {}
+        set request {}
+        set router {}
+        set interface_out {}
+
+        # Validate mandatory arguments
+        if {[catch {set interface_out [dict get $args -interface_out]}]} {
+            error "Invalid arguments to ::Achatina::Response::output__"
+        }
+
+        # Retrieve optional arguments 
+        catch {set session [dict get $args -session]}
+        catch {set request [dict get $args -request]}
+        catch {set router [dict get $args -router]}
+
         if {($session ne "") && ($request ne "")} {
-            $session output__ $request $interface_out
+            $session output__ -request $request -interface_out $interface_out
         }
 
         dict for {k v} $headers {

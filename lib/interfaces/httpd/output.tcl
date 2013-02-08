@@ -6,12 +6,17 @@
 namespace eval ::Achatina::Interfaces::Httpd {}
 
 oo::class create ::Achatina::Interfaces::Httpd::Output {
-    constructor {sock} {
+    constructor {args} {
         variable cookies {} ;# list of cookie headers
         variable contents {}
         variable headers {Content-Type text/html}
         variable status 200
-        variable handle $sock
+        variable handle {}
+
+        # Validate arguments, note that potential error will not be catched by anything
+        if {[catch {set handle [dict get $args -sock]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::Output constructor"
+        }
 
         package require query_plus
     }
@@ -36,9 +41,24 @@ oo::class create ::Achatina::Interfaces::Httpd::Output {
         return
     }
 
-    method set_cookie {name value expires} {
+    method set_cookie {args} {
+        # Validate arguments
+        
+        if {[catch {set name [dict get $args -name]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+
+        if {[catch {set value [dict get $args -value]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+        
+        if {[catch {set expiration_date [dict get $args -expiration_date]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+
         variable cookies
-        lappend cookies [::query_plus::bake $name $value $expires /]
+        
+        lappend cookies [::query_plus::bake $name $value $expiration_date /]
     }
 
     method set_status {s} {

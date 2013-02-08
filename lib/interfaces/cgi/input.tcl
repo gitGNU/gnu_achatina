@@ -6,10 +6,13 @@
 namespace eval ::Achatina::Interfaces::Cgi {}
 
 oo::class create ::Achatina::Interfaces::Cgi::Input {
-    constructor {handle} {
+    constructor {args} {
         namespace path ::tcl::mathop
 
         package require ncgi
+        
+        set handle {}
+        catch {set handle [dict get $args -handle]}
 
         variable headers {}
         variable params_dict {}

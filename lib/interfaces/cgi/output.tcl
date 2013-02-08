@@ -6,12 +6,15 @@
 namespace eval ::Achatina::Interfaces::Cgi {}
 
 oo::class create ::Achatina::Interfaces::Cgi::Output {
-    constructor {handle} {
+    constructor {args} {
         package require ncgi
 
         variable contents {}
         variable headers {Content-Type text/html}
         variable status 200
+
+        set handle {}
+        catch {set handle [dict get $args -handle]}
     }
 
     method set_contents {c} {
@@ -35,6 +38,20 @@ oo::class create ::Achatina::Interfaces::Cgi::Output {
     }
 
     method set_cookie {name value expires} {
+        # Validate arguments
+        
+        if {[catch {set name [dict get $args -name]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+
+        if {[catch {set value [dict get $args -value]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+        
+        if {[catch {set expires [dict get $args -expiration_date]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::set_cookie"
+        }
+
         set expiration_date [clock format $expires -format {%a, %d-%b-%Y %T %Z}]
         ::ncgi::setCookie -name $name -value $value -expires $expiration_date -path /
     }

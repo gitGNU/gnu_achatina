@@ -14,12 +14,16 @@ oo::class create ::Achatina::Configuration {
     # Parameters:
     #
     #   - Path to configuration file
-    constructor {config_file} {
+    constructor {args} {
         variable filename
         variable yaml_file
         variable configuration_dict {}
 
         package require yaml
+        
+        # Retrieve arguments
+        set config_file {}
+        catch {set config_file [dict get $args -config_file]}
 
         if {$config_file ne ""} {
             set fp {}

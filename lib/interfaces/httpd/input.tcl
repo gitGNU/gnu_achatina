@@ -6,18 +6,35 @@
 namespace eval ::Achatina::Interfaces::Httpd {}
 
 oo::class create ::Achatina::Interfaces::Httpd::Input {
-    constructor {sock headers_ settings_ body_} {
+    constructor {args} {
         package require query_plus
 
-        variable handle $sock
-        variable headers $headers_
-        variable settings $settings_
+        variable handle {}
+        variable headers {}
+        variable settings {}
         variable cookies [::query_plus::get_cookies $headers]
-        variable body $body_
+        variable body {}
         variable params_dict {}
 
+        # Validate arguments, note that potential error will not be catched by anything
+        if {[catch {set handle [dict get $args -sock]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::Input constructor"
+        }
+
+        if {[catch {set headers [dict get $args -headers]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::Input constructor"
+        }
+
+        if {[catch {set settings [dict get $args -settings]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::Input constructor"
+        }
+
+        if {[catch {set body [dict get $args -body]}]} {
+            error "Invalid arguments to ::Achatina::Interfaces::Httpd::Input constructor"
+        }
+
         ### set headers ###
-        dict set headers REMOTE_ADDR [lindex [fconfigure $sock -peername] 0]
+        dict set headers REMOTE_ADDR [lindex [fconfigure $handle -peername] 0]
         dict set headers REQUEST_METHOD [string tolower [dict get $headers REQUEST_METHOD]]
         dict set headers __PROTOCOL__ {http}
     }

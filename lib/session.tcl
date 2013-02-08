@@ -132,10 +132,22 @@ oo::class create ::Achatina::Session {
         set params [dict merge $params $p]
     }
 
-    method output__ {request interface_out} {
+    method output__ {args} {
         variable params
         variable secret_key
         variable config
+
+        set request {}
+        set interface_out {}
+
+        # Validate arguments
+        if {[catch {set request [dict get $args -request]}]} {
+            error "Invalid arguments to ::Achatina::Session::output__"
+        }
+
+        if {[catch {set interface_out [dict get $args -interface_out]}]} {
+            error "Invalid arguments to ::Achatina::Session::output__"
+        }
 
         set output {}
         set params_base32 [::base32::encode $params]
@@ -172,6 +184,6 @@ oo::class create ::Achatina::Session {
         set expiration_seconds [+ [clock seconds] [$config get_param app session seconds]]
 
         # Feed browser with tasty cookie ;)
-        $interface_out set_cookie [$config get_param app session cookie_name] $output $expiration_seconds
+        $interface_out set_cookie -name [$config get_param app session cookie_name] -value $output -expiration_date $expiration_seconds
     }
 }
