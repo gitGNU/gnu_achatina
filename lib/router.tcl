@@ -63,6 +63,10 @@ oo::class create ::Achatina::Router {
     #
     # Usage:
     #
+    # > $router add_route -path path -class class_name
+    #
+    # Example:
+    #
     # > $router add_route -path / -class ::Foo::Bar
     #
     # Parameters:
@@ -140,12 +144,29 @@ oo::class create ::Achatina::Router {
     # It checks whether specified route exists. It returns boolean value, "true"
     # or "false".
     #
+    # Usage:
+    #
+    # > $router does_route_exist -path path -method request_method
+    #
+    # Example:
+    #
+    # > $router does_route_exist -path / -method get
+    #
     # Parameters:
     #
-    #   - Route path
-    #   - Request method
-    method does_route_exist {path method} {
+    #   - path - Route path
+    #   - method - Request method
+    method does_route_exist {args} {
         variable routes
+
+        # Validate arguments
+        if {[catch {set path [dict get $args -path]}]} {
+            error "Invalid arguments to ::Achatina::Router::does_route_exist"
+        }
+
+        if {[catch {set method [dict get $args -method]}]} {
+            error "Invalid arguments to ::Achatina::Router::does_route_exist"
+        }
 
         # Normalize slashes
         regsub -all {/+} $path {/} path
@@ -161,8 +182,17 @@ oo::class create ::Achatina::Router {
         return false;
     }
 
-    method _does_route_match {request route} {
+    method _does_route_match {args} {
         variable routes
+
+        # Validate arguments
+        if {[catch {set request [dict get $args -request]}]} {
+            error "Invalid arguments to ::Achatina::Router::_does_route_match"
+        }
+
+        if {[catch {set route [dict get $args -route]}]} {
+            error "Invalid arguments to ::Achatina::Router::_does_route_match"
+        }
 
         # Normalize slashes
         set path [$request get_header PATH_INFO]
@@ -181,12 +211,25 @@ oo::class create ::Achatina::Router {
         return [regsub -all -- {\W} $s {\\\0}]
     }
 
-    method dispatch {request session config} {
+    method dispatch__ {args} {
         variable routes
+
+        # Validate arguments
+        if {[catch {set request [dict get $args -request]}]} {
+            error "Invalid arguments to ::Achatina::Router::dispatch"
+        }
+
+        if {[catch {set session [dict get $args -session]}]} {
+            error "Invalid arguments to ::Achatina::Router::dispatch"
+        }
+
+        if {[catch {set config [dict get $args -config]}]} {
+            error "Invalid arguments to ::Achatina::Router::dispatch"
+        }
 
         foreach route $routes {
             # Try to match path against route regexp and request method
-            if {[my _does_route_match $request $route]} {
+            if {[my _does_route_match -request $request -route $route]} {
                 # We only need list of capture-groups of placeholders values, so we need to strip first element from list
                 set placeholders_values [lrange [regexp -inline -- [$route get_route_regexp] [$request get_header PATH_INFO]] 1 end]
                 set placeholders_keys [$route get_placeholders_keys]

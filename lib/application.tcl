@@ -85,7 +85,7 @@ oo::class create ::Achatina::Application {
             set startup [$startup_class new $config]
             $startup set_routes $router $config
 
-            set response_obj [$router dispatch $request $session $config]
+            set response_obj [$router dispatch__ -request $request -session $session -config $config]
             $response_obj output__ -session $session -request $request -router $router -interface_out $interface_out
         }
 
