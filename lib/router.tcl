@@ -14,8 +14,8 @@
 # >     }
 # >
 # >     method set_routes {router config} {
-# >         $router add_route / ::Something::Class1
-# >         $router add_route {/:lol/abc} ::Something::Class2
+# >         $router add_route -path / -class ::Something::Class1
+# >         $router add_route -path {/:lol/abc} -class ::Something::Class2
 # >     }
 # > }
 # >
