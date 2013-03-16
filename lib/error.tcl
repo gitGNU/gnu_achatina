@@ -26,15 +26,19 @@ oo::class create ::Achatina::Error {
     # Arguments to this method must form valid dictionary.
     #
     # Usage:
+    #
+    # > :Achatina::Application new -status status -contents contents -config config ?-options options?
     # 
-    # > ::Achatina::Application new -status {404} -contents {Not Found} -options {} -config $config
+    # Example:
+    #
+    # > ::Achatina::Application new -status {404} -contents {Not Found} -config $config
     #
     # Parameters:
     #
     #   - status - Status code
     #   - contents - Error contents
-    #   - options - Error options (returned by try {} on error)
     #   - config - <::Achatina::Configuration> object
+    #   - options - Error options (returned by try {} on error)
     constructor {args} {
         # Validate arguments
         if {[catch {set status_ [dict get $args -status]}]} {
@@ -45,12 +49,13 @@ oo::class create ::Achatina::Error {
             error "Invalid arguments to ::Achatina::Error constructor"
         }
 
-        if {[catch {set options_ [dict get $args -options]}]} {
+        if {[catch {set config_ [dict get $args -config]}]} {
             error "Invalid arguments to ::Achatina::Error constructor"
         }
 
-        if {[catch {set config_ [dict get $args -config]}]} {
-            error "Invalid arguments to ::Achatina::Error constructor"
+
+        if {[catch {set options_ [dict get $args -options]}]} {
+            set options_ {}
         }
 
         variable status $status_

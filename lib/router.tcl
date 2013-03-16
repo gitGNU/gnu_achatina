@@ -65,14 +65,14 @@ oo::class create ::Achatina::Router {
     #
     # > $router add_route -path path -class class_name
     #
-    # Example:
-    #
-    # > $router add_route -path / -class ::Foo::Bar
-    #
     # Parameters:
     #
     #   - path - Route path
     #   - class - Name of handler class (it will be constructed by router)
+    #
+    # Example:
+    #
+    # > $router add_route -path / -class ::Foo::Bar
     method add_route {args} {
         variable routes
 
@@ -148,14 +148,14 @@ oo::class create ::Achatina::Router {
     #
     # > $router does_route_exist -path path -method request_method
     #
-    # Example:
-    #
-    # > $router does_route_exist -path / -method get
-    #
     # Parameters:
     #
     #   - path - Route path
     #   - method - Request method
+    #
+    # Example:
+    #
+    # > $router does_route_exist -path / -method get
     method does_route_exist {args} {
         variable routes
 

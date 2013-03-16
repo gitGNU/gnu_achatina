@@ -30,12 +30,16 @@ oo::class create ::Achatina::Template {
     # Arguments to this method must form valid dictionary.
     #
     # Usage:
-    # 
-    # > set tmpl [::Achatina::Template new -filename a.xxx -config $config]
+    #
+    # > ::Achatina::Template new -filename filename -config config
     #
     # Parameters:
     #   - filename - Path to template file (either absolute or relative to app->template->path configuration setting)
     #   - config - <::Achatina::Configuration> object
+    #
+    # Example:
+    # 
+    # > set tmpl [::Achatina::Template new -filename a.xxx -config $config]
     constructor {args} {
         namespace path ::tcl::mathop
 
@@ -137,8 +141,12 @@ oo::class create ::Achatina::Template {
     #
     # It gets specified param from template object. Params are set by <set_param> and <set_params>.
     #
+    # Usage:
+    #
+    # > get_param key
+    # 
     # Parameters:
-    #   - Name of requested param
+    #   - key - Key of requested param
     method get_param {k} {
         variable variables
         if {[dict exists $variables $k]} {
@@ -152,9 +160,13 @@ oo::class create ::Achatina::Template {
     #
     # It sets template param which will appear in template as variable with same name.
     #
+    # Usage:
+    #
+    # > set_param key value
+    #
     # Parameters:
-    #   - Name of param
-    #   - Value of param
+    #   - key - Key of param
+    #   - value - Value of param
     method set_param {k v} {
         variable variables
         dict set variables $k $v
@@ -164,8 +176,12 @@ oo::class create ::Achatina::Template {
     #
     # It sets multiple template params.
     #
+    # Usage:
+    #
+    # > set_params dict
+    #
     # Parameters:
-    #   - Dict containing multiple param-value pairs
+    #   - dict - Dict containing multiple param-value pairs
     method set_params {p} {
         variable variables
         set variables [dict merge $variables $p]
@@ -175,6 +191,10 @@ oo::class create ::Achatina::Template {
     #
     # It returns string containing template output. Note that this
     # method does not return <::Achatina::Response> object.
+    #
+    # Usage:
+    #
+    # > get_output ?-force-recompile?
     #
     # Parameters:
     #

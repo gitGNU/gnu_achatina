@@ -19,8 +19,8 @@ namespace eval ::Achatina {
 # >     }
 # >
 # >     method set_routes {router config} {
-# >         $router add_route / ::Class1
-# >         $router add_route /foo ::Class2
+# >         $router add_route -path /  -class::Class1
+# >         $router add_route -path /foo -class ::Class2
 # >     }
 # > }
 # >

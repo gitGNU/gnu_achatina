@@ -11,9 +11,7 @@ oo::class create ::Achatina::Configuration {
     #
     # Creates configuration object and loads configuration from specified YAML file.
     #
-    # Parameters:
-    #
-    #   - Path to configuration file
+    # You shouldn't instantiate this class.
     constructor {args} {
         variable filename
         variable yaml_file
@@ -99,6 +97,10 @@ oo::class create ::Achatina::Configuration {
     # Function: get_param
     #
     # Returns string containing requested configuration param.
+    #
+    # Usage:
+    #
+    # > get_param key ?key ...?
     #
     # Example:
     #

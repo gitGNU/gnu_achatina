@@ -3,6 +3,10 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
+# Class: ::Achatina::Route
+#
+# This class represents single route, it is used internally, you shouln't care
+# about it.
 oo::class create ::Achatina::Route {
     constructor {} {
         variable path {}

@@ -85,8 +85,12 @@ oo::class create ::Achatina::Session {
     # It retrieves param stored in session. If param does not exist,
     # empty string is returned.
     #
+    # Usage:
+    #
+    # > get_param key
+    #
     # Parameters:
-    #   - Name of param
+    #   - key - Key of param
     method get_param {k} {
         variable params
 
@@ -101,9 +105,13 @@ oo::class create ::Achatina::Session {
     #
     # It sets param and stores it in session.
     #
+    # Usage:
+    #
+    # > set_param param value
+    #
     # Parameters:
-    #   - Name of param
-    #   - Value of param
+    #   - key - Key of param
+    #   - value - Value of param
     method set_param {k v} {
         variable params
         dict set params $k $v
@@ -113,8 +121,7 @@ oo::class create ::Achatina::Session {
     #
     # It retrieves list of all params stored in session.
     #
-    # Parameters:
-    #   - Name of param
+    # This method takes no arguments.
     method get_params {} {
         variable params
         return $params
@@ -124,9 +131,13 @@ oo::class create ::Achatina::Session {
     #
     # It sets multiple params.
     #
+    # Usage:
+    #
+    # > set_params dict
+    #
     # Parameters:
     #
-    #   - Dict containing param-value pairs
+    #   - dict - Dict containing param-value pairs
     method set_params {p} {
         variable params
         set params [dict merge $params $p]

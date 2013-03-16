@@ -28,13 +28,19 @@ oo::class create ::Achatina::Response {
     #
     # Usage:
     #
-    # > set response [::Achatina::Response new]
-    # > # or:
-    # > set response [::Achatina::Response new -contents {foobar}]
+    # > ::Achatina::Response new ?-contents contents?
     #
     # Parameters:
     #
     #   - (optional) contents - Contents
+    #
+    # Examples:
+    #
+    # > set response [::Achatina::Response new]
+    # > # or:
+    # > set response [::Achatina::Response new -contents {foobar}]
+    #
+
     constructor {args} {
         variable contents {}
         variable headers {}

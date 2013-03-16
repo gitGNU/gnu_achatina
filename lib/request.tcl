@@ -119,8 +119,12 @@ oo::class create ::Achatina::Request {
     # If param has more than one value, this method will return only first one.
     # For capturing more than one value, use <get_param_with_meta>.
     #
+    # Usage:
+    #
+    # > get_param key
+    #
     # Parameters:
-    #   - Name of param
+    #   - key - Key of param
     method get_param {p} {
         variable params_without_meta
 
@@ -140,8 +144,12 @@ oo::class create ::Achatina::Request {
     # It returns value of specified (GET or POST or route placeholder) param with metadata. Metadata is in
     # same format as in ncgi.
     #
+    # Usage:
+    #
+    # > get_param_with_meta key
+    #
     # Parameters:
-    #   - Name of param
+    #   - key - Key of param
 
     method get_param_with_meta {p} {
         variable all_params
