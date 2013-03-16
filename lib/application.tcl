@@ -55,7 +55,7 @@ oo::class create ::Achatina::Application {
     #
     # Usage:
     # 
-    # > ::Achatina::Application new -class class_name -config config_object
+    # > ::Achatina::Application new -class class_name -config_file config_object
     #
     # Parameters:
     #
@@ -65,7 +65,7 @@ oo::class create ::Achatina::Application {
         set error_string {}
 
         # Validate arguments
-        if {[catch {set config_file [dict get $args -config]}]} {
+        if {[catch {set config_file [dict get $args -config_file]}]} {
             error "Invalid arguments to ::Achatina::Application constructor"
         }
 
